@@ -2,6 +2,7 @@ import React from 'react';
 import CreateLink from './CreatLink';
 import Header from './Header';
 import LinkList from './LinkList';
+import Login from './Login';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 
@@ -15,6 +16,10 @@ const App = () => {
           <Route
             path="/create"
             element={<CreateLink/>}
+          />
+          <Route
+          path='/login'
+          element={<Login />}
           />
         </Routes>
       </div>
