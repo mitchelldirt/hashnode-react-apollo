@@ -4,6 +4,7 @@ import Header from './Header';
 import LinkList from './LinkList';
 import Login from './Login';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import Search from './Search';
 
 
 const App = () => {
@@ -12,16 +13,22 @@ const App = () => {
       <Header />
       <div className="ph3 pv1 background-gray">
         <Routes>
-          <Route path="/" element={<LinkList/>} />
+          <Route path="/" element={<LinkList />} />
           <Route
             path="/create"
-            element={<CreateLink/>}
+            element={<CreateLink />}
           />
           <Route
-          path='/login'
-          element={<Login />}
+            path='/login'
+            element={<Login />}
           />
+          <Route
+            path='/search'
+            element={<Search />}
+            />
         </Routes>
+
+
       </div>
     </div>
   );
