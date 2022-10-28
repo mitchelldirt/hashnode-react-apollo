@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import {FEED_QUERY} from './LinkList'
+import { FEED_QUERY } from './LinkList'
+import { AUTH_TOKEN, LINKS_PER_PAGE } from '../constants';
 
 const CREATE_LINK_MUTATION = gql`
 mutation PostMutation(
@@ -26,25 +27,33 @@ const CreateLink = () => {
     const navigate = useNavigate()
     const [createLink] = useMutation(CREATE_LINK_MUTATION, {
         variables: {
-          description: formState.description,
-          url: formState.url
+            description: formState.description,
+            url: formState.url
         },
         update: (cache, { data: { post } }) => {
-          const data = cache.readQuery({
-            query: FEED_QUERY,
-          });
-    
-          cache.writeQuery({
-            query: FEED_QUERY,
-            data: {
-              feed: {
-                links: [post, ...data.feed.links]
-              }
-            },
-          });
+            const take = LINKS_PER_PAGE;
+            const skip = 0;
+            const orderBy = { createdAt: 'desc' };
+            const data = cache.readQuery({
+                query: FEED_QUERY,
+            });
+
+            cache.writeQuery({
+                query: FEED_QUERY,
+                data: {
+                    feed: {
+                        links: [post, ...data.feed.links]
+                    }
+                },
+                variables: {
+                    take,
+                    skip,
+                    orderBy
+                }
+            });
         },
         onCompleted: () => navigate("/")
-      });
+    });
 
     return (
         <>
@@ -80,8 +89,8 @@ const CreateLink = () => {
                         placeholder='The URL for the link'
                     />
                 </div>
-                <button 
-                type='submit'>Submit</button>
+                <button
+                    type='submit'>Submit</button>
             </form>
         </>
     )
